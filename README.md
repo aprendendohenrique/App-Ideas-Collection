@@ -1,0 +1,1 @@
+This is a collection of app ideas made in python, begginer, intermediate, difficult.
