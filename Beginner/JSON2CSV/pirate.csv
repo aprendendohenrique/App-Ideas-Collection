@@ -1,6 +1,0 @@
-id,first_name,last_name,age,email,country,is_active,skills,address
-1,Alice,Johnson,28,alice.johnson@example.com,USA,True,"['Python', 'SQL', 'Git']","{'city': 'New York', 'zip_code': '10001'}"
-2,Bruno,Silva,35,bruno.silva@example.com,Brazil,False,"['JavaScript', 'React', 'Node.js']","{'city': 'São Paulo', 'zip_code': '01000-000'}"
-3,Claire,Martin,24,claire.martin@example.com,France,True,"['Java', 'Spring', 'Docker']","{'city': 'Paris', 'zip_code': '75001'}"
-4,David,Kim,31,david.kim@example.com,South Korea,True,"['C++', 'Linux', 'OpenGL']","{'city': 'Seoul', 'zip_code': '04524'}"
-5,Emma,Brown,27,emma.brown@example.com,Canada,False,"['Go', 'Kubernetes', 'AWS']","{'city': 'Toronto', 'zip_code': 'M5H 2N2'}"
