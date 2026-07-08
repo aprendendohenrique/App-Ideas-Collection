@@ -1,15 +1,18 @@
 import json
 import csv
+import ast
 
 
 class Converter:
     """A JSON to CSV Converter"""
 
-    def __init__(self):
-        with open("original.json") as file:
+
+    @classmethod
+    def json_to_csv(cls, file_path, csv_name):
+        with open(file_path) as file:
             json_file = json.load(file)
 
-        with open("pirate.csv", "w", newline="") as csvfile:
+        with open(csv_name, "w", newline="") as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=json_file[0])
 
             writer.writeheader()
@@ -18,5 +21,44 @@ class Converter:
                 writer.writerow(block)
 
 
+    @classmethod
+    def csv_to_json(cls, file_path, json_name):
+        with open(file_path) as file:
+            csv_file = csv.DictReader(file)
+            content = Converter._format_csv_file(csv_file)
+
+        with open(json_name, "w") as json_file:
+            json.dump(content, json_file, indent=4)
+
+
+    @classmethod
+    def _format_csv_file(cls, csv_file):
+        content = []
+
+        for line in csv_file:
+            for key, value in line.items():
+                if isinstance(value, str):
+                    try:
+                        line[key] = int(value)
+                    except ValueError:
+                        try:
+                            line[key] = float(value)
+                        except ValueError:
+                            pass
+
+                    if value == "True" or value == "true":
+                        line[key] = True
+                    elif value == "False" or value == "false":
+                        line[key] = False
+
+                    elif value.startswith(("[", "{")):
+                        line[key] = ast.literal_eval(value)
+
+            content.append(line)
+
+        return content
+
+
 if __name__ == "__main__":
-    converter = Converter()
+    Converter.json_to_csv("original.json", "pirate.csv")
+    Converter.csv_to_json("pirate.csv", "pirate.json")
