@@ -1,16 +1,27 @@
 import customtkinter
 
 
-def button_callback():
-    print("Button pressed")
+class App(customtkinter.CTk):
+    """Class App"""
+    def __init__(self):
+        super().__init__()
 
+        self.title("my app")
+        self.geometry("400x180")
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure((0, 1), weight=1)
 
-app = customtkinter.CTk()
-app.title("my app")
-app.geometry("400x150")
+        self.checkbox_1 = customtkinter.CTkCheckBox(self, text="checkbox_1")
+        self.checkbox_1.grid(row=0, column=0, padx=10, pady=(10, 0), sticky="w")
 
-button = customtkinter.CTkButton(app, text="My Button", command=button_callback)
-button.grid(row=0, column=0, padx=20, pady=20, sticky="ew")
-app.grid_columnconfigure(0, weight=1)
+        self.checkbox_2 = customtkinter.CTkCheckBox(self, text="checkbox_2")
+        self.checkbox_2.grid(row=1, column=0, padx=10, pady=(10, 0), sticky="w")
 
+        self.button = customtkinter.CTkButton(self, text="My Button", command=self.button_callback)
+        self.button.grid(row=3, column=0, padx=10, pady=10, sticky="ew", columnspan=2)
+
+    def button_callback(self):
+        print("Button pressed")
+
+app = App()
 app.mainloop()
