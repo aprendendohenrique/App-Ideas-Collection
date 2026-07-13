@@ -1,98 +1,36 @@
-import os
-
 import customtkinter
 
 
-class MyCheckboxFrame(customtkinter.CTkFrame):
-    """Frame class for the checkboxes"""
-
-    def __init__(self, master, title, values):
-        super().__init__(master)
-        self.grid_columnconfigure(0, weight=1)
-        self.checkboxes = []
-
-        self.title = customtkinter.CTkLabel(self, text=title, fg_color="gray30", corner_radius=6)
-        self.title.grid(row=0, column=0, padx=10, pady=(10, 0), sticky="ew")
-
-        for i, value in enumerate(values):
-            checkbox = customtkinter.CTkCheckBox(self, text=value)
-            checkbox.grid(row=i+1, column=0, padx=10, pady=(10, 0), sticky="w")
-            self.checkboxes.append(checkbox)
-
-    def get(self):
-        checked_checkboxes = []
-        for checkbox in self.checkboxes:
-            if checkbox.get() == 1:
-                checked_checkboxes.append(checkbox.cget("text"))
-        return checked_checkboxes
-
-
-class MyScrollableCheckboxFrame(customtkinter.CTkScrollableFrame):
-    """Frame class for the checkboxes"""
-
-    def __init__(self, master, title, values):
-        super().__init__(master, label_text=title)
-        self.grid_columnconfigure(0, weight=1)
-        self.checkboxes = []
-
-        for i, value in enumerate(values):
-            checkbox = customtkinter.CTkCheckBox(self, text=value)
-            checkbox.grid(row=i+1, column=0, padx=10, pady=(10, 0), sticky="w")
-            self.checkboxes.append(checkbox)
-
-    def get(self):
-        checked_checkboxes = []
-        for checkbox in self.checkboxes:
-            if checkbox.get() == 1:
-                checked_checkboxes.append(checkbox.cget("text"))
-        return checked_checkboxes
-
-
-class MyRadiobuttonFrame(customtkinter.CTkFrame):
-    """Frame class for the checkboxes"""
-
-    def __init__(self, master, title, values):
-        super().__init__(master)
-        self.grid_columnconfigure(0, weight=1)
-        self.radiobuttons = []
-        self.variable = customtkinter.StringVar(value="")
-
-        self.title = customtkinter.CTkLabel(self, text=title, fg_color="gray30", corner_radius=6)
-        self.title.grid(row=0, column=0, padx=10, pady=(10, 0), sticky="ew")
-
-        for i, value in enumerate(values):
-            radiobutton = customtkinter.CTkRadioButton(self, text=value, value=value, variable=self.variable)
-            radiobutton.grid(row=i+1, column=0, padx=10, pady=(10, 0), sticky="w")
-            self.radiobuttons.append(radiobutton)
-
-    def get(self):
-        return self.variable.get()
-
-    def set(self, value):
-        self.variable.set(value)
-
-
 class App(customtkinter.CTk):
-    """App Class"""
+    """Main class that manages the app."""
 
-    def __init__(self):
+    def __init__(self, screen_height):
         super().__init__()
 
-        self.title("my app")
-        self.geometry("400x220")
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_rowconfigure(0, weight=1)
+        self.geometry(f"{round(screen_height * 1.78)}x{screen_height}")
+        self.grid_rowconfigure(1, weight=1)
+        self.grid_columnconfigure((0, 1), weight=1)
 
-        values = ["value 1", "value 2", "value 3", "value 4", "value 5", "value 6"]
-        self.scrollable_checkbox_frame = MyScrollableCheckboxFrame(self, title="Values", values=values)
-        self.scrollable_checkbox_frame.grid(row=0, column=0, padx=10, pady=(10, 0), sticky="nsew")
+        title = customtkinter.CTkLabel(self, text="JSV Converter", font=("Arial", 20), fg_color="transparent", pady=30)
+        title.grid(row=0, column=0, columnspan=3)
 
-        self.button = customtkinter.CTkButton(self, text="My Button", command=self.button_callback)
-        self.button.grid(row=3, column=0, padx=10, pady=10, sticky="ew", columnspan=2)
+        textbox_1 = customtkinter.CTkTextbox(self)
+        textbox_1.grid(row=1, column=0, padx=(10, 5), sticky="nsew")
+        textbox_2 = customtkinter.CTkTextbox(self)
+        textbox_2.grid(row=1, column=1, padx=(5, 10), sticky="nsew")
 
-    def button_callback(self):
-        print("scrollable_checkbox_frame: ", self.scrollable_checkbox_frame.get())
-        # print("radiobutton_frame: ", self.radiobutton_frame.get())
+        text_1 = customtkinter.CTkLabel(self, text="JSON", font=("Arial", 15), fg_color="transparent")
+        text_1.grid(row=2, column=0)
+        text_2 = customtkinter.CTkLabel(self, text="CSV", font=("Arial", 15), fg_color="transparent")
+        text_2.grid(row=2, column=1)
 
-app = App()
-app.mainloop()
+        my_button_1 = customtkinter.CTkButton(self, text="<-=-\n-=->", width=40)
+        my_button_1.grid(row=2, column=0, columnspan=3, pady=(10, 5))
+
+        my_button_2 = customtkinter.CTkButton(self, text="My Button!")
+        my_button_2.grid(row=3, column=0, columnspan=3, padx=(5, 5), pady=(5, 0), sticky="ew")
+
+
+if __name__ == "__main__":
+    app = App(500)
+    app.mainloop()
