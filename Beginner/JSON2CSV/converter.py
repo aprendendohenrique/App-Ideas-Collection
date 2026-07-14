@@ -1,6 +1,8 @@
 import json
 import csv
 import ast
+import io
+from csv import DictReader
 
 
 class Converter:
@@ -60,16 +62,30 @@ class Converter:
 
     @classmethod
     def text_json_to_csv(cls, text):
-        json_text = json.loads(text)
-        csv_file = csv.DictReader(json_text)
-        print(csv_file)
-        content = Converter._format_csv_file(csv_file)
-        return content
+        data = json.loads(text)
+        headers = data[0].keys()
+
+        output = io.StringIO()
+
+        writer = csv.DictWriter(output, fieldnames=headers)
+        writer.writeheader()
+        writer.writerows(data)
+
+        return output.getvalue()
+
 
 
     @classmethod
     def text_csv_to_json(cls, text):
-        ...
+        data = text.split("\n")
+        data = csv.DictReader(data)
+        content = Converter._format_csv_file(data)
+
+        output = io.StringIO()
+
+        json.dump(content, output, indent=4)
+
+        return output.getvalue()
 
 
 if __name__ == "__main__":

@@ -48,13 +48,15 @@ class App(customtkinter.CTk):
             self.text_2.configure(text="CSV")
 
     def convert(self):
-        if self.mode == "json_to_csv":
-            content = Converter.text_json_to_csv(self.textbox_1.get("0.0", "end"))
-            self.textbox_2.delete("0.0", "end")
-            self.textbox_2.insert("0.0", content)
-        else:
-            ...
+        text = self.textbox_1.get("0.0", "end")
+        self.textbox_2.delete("0.0", "end")
 
+        if self.mode == "json_to_csv":
+            content = Converter.text_json_to_csv(text)
+        else:
+            content = Converter.text_csv_to_json(text)
+
+        self.textbox_2.insert("0.0", content)
 
 if __name__ == "__main__":
     app = App(500)
