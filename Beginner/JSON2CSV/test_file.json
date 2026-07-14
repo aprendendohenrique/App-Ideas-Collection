@@ -1,0 +1,92 @@
+[
+    {
+        "id": 1,
+        "first_name": "Alice",
+        "last_name": "Johnson",
+        "age": 28,
+        "email": "alice.johnson@example.com",
+        "country": "USA",
+        "is_active": true,
+        "skills": [
+            "Python",
+            "SQL",
+            "Git"
+        ],
+        "address": {
+            "city": "New York",
+            "zip_code": "10001"
+        }
+    },
+    {
+        "id": 2,
+        "first_name": "Bruno",
+        "last_name": "Silva",
+        "age": 35,
+        "email": "bruno.silva@example.com",
+        "country": "Brazil",
+        "is_active": false,
+        "skills": [
+            "JavaScript",
+            "React",
+            "Node.js"
+        ],
+        "address": {
+            "city": "S\u00e3o Paulo",
+            "zip_code": "01000-000"
+        }
+    },
+    {
+        "id": 3,
+        "first_name": "Claire",
+        "last_name": "Martin",
+        "age": 24,
+        "email": "claire.martin@example.com",
+        "country": "France",
+        "is_active": true,
+        "skills": [
+            "Java",
+            "Spring",
+            "Docker"
+        ],
+        "address": {
+            "city": "Paris",
+            "zip_code": "75001"
+        }
+    },
+    {
+        "id": 4,
+        "first_name": "David",
+        "last_name": "Kim",
+        "age": 31,
+        "email": "david.kim@example.com",
+        "country": "South Korea",
+        "is_active": true,
+        "skills": [
+            "C++",
+            "Linux",
+            "OpenGL"
+        ],
+        "address": {
+            "city": "Seoul",
+            "zip_code": "04524"
+        }
+    },
+    {
+        "id": 5,
+        "first_name": "Emma",
+        "last_name": "Brown",
+        "age": 27,
+        "email": "emma.brown@example.com",
+        "country": "Canada",
+        "is_active": false,
+        "skills": [
+            "Go",
+            "Kubernetes",
+            "AWS"
+        ],
+        "address": {
+            "city": "Toronto",
+            "zip_code": "M5H 2N2"
+        }
+    }
+]

@@ -58,6 +58,19 @@ class Converter:
 
         return content
 
+    @classmethod
+    def text_json_to_csv(cls, text):
+        json_text = json.loads(text)
+        csv_file = csv.DictReader(json_text)
+        print(csv_file)
+        content = Converter._format_csv_file(csv_file)
+        return content
+
+
+    @classmethod
+    def text_csv_to_json(cls, text):
+        ...
+
 
 if __name__ == "__main__":
     Converter.json_to_csv("original.json", "pirate.csv")
