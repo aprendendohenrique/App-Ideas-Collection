@@ -3,6 +3,7 @@ import csv
 import ast
 import io
 from csv import DictReader
+from json import JSONDecodeError
 
 
 class Converter:
@@ -60,32 +61,40 @@ class Converter:
 
         return content
 
+
     @classmethod
     def text_json_to_csv(cls, text):
-        data = json.loads(text)
-        headers = data[0].keys()
+        if text.startswith("["):
+            try:
+                data = json.loads(text)
+            except JSONDecodeError:
+                return None
+            else:
+                headers = data[0].keys()
 
-        output = io.StringIO()
+                output = io.StringIO()
 
-        writer = csv.DictWriter(output, fieldnames=headers)
-        writer.writeheader()
-        writer.writerows(data)
+                writer = csv.DictWriter(output, fieldnames=headers)
+                writer.writeheader()
+                writer.writerows(data)
 
-        return output.getvalue()
-
+                return output.getvalue()
+        return None
 
 
     @classmethod
     def text_csv_to_json(cls, text):
         data = text.split("\n")
-        data = csv.DictReader(data)
-        content = Converter._format_csv_file(data)
+        if len(data) > 2 and not data[0].startswith("["):
+            data = csv.DictReader(data)
+            content = Converter._format_csv_file(data)
 
-        output = io.StringIO()
+            output = io.StringIO()
 
-        json.dump(content, output, indent=4)
+            json.dump(content, output, indent=4)
 
-        return output.getvalue()
+            return output.getvalue()
+        return None
 
 
 if __name__ == "__main__":
