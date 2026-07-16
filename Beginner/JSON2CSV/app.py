@@ -1,4 +1,3 @@
-import json
 import customtkinter
 
 from converter import Converter
