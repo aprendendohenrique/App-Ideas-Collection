@@ -1,0 +1,6 @@
+.gitignore
+pirate.csv
+pirate.json
+app.spec
+dist
+build
