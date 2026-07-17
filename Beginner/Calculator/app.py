@@ -7,6 +7,9 @@ class App(customtkinter.CTk):
     def __init__(self, screen_width):
         super().__init__()
 
+        self.title("Calculator")
+        self.iconbitmap("calc-ico.ico")
+
         self.geometry(f"{screen_width}x{round(screen_width * 1.60)}")
         self.columnconfigure(0, weight=0)
 
