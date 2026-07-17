@@ -10,6 +10,8 @@ class App(customtkinter.CTk):
         super().__init__()
 
         # Base config
+        self.title("JSV Converter")
+        self.iconbitmap("jsv.ico")
         self.geometry(f"{round(screen_height * 1.78)}x{screen_height}")
         self.grid_rowconfigure(1, weight=1)
         self.grid_columnconfigure((0, 1), weight=1)
