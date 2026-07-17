@@ -1,4 +1,5 @@
 .gitignore
+__pycache__
 pirate.csv
 pirate.json
 app.spec
