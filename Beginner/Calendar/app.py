@@ -41,9 +41,24 @@ class App(customtkinter.CTk):
         # Body
         self.body_frame = customtkinter.CTkFrame(self, fg_color="transparent")
         self.body_frame.grid(row=1, column=0, sticky="nsew", pady=20)
-        self.button = customtkinter.CTkButton(self.body_frame)
-        self.button.grid(row=0, column=0)
 
+        self.button_1 = DayBtn(self.body_frame, text="1")
+        self.button_1.grid(row=0, column=0)
+
+
+class DayBtn(customtkinter.CTkButton):
+    
+    def __init__(self, master, text):
+        super().__init__(master)
+
+        size = 100
+        self.configure(width=size, height=size, border_width=size)
+        self.grid_propagate(False)
+
+        self.columnconfigure(0, weight=1)
+
+        self.label = customtkinter.CTkLabel(self, text=text, fg_color="gray", height=round(size/5), font=("Arial", round(size/6.5)))
+        self.label.grid(row=0, column=0, sticky="ew")
 
 if __name__ == '__main__':
     app = App(550)
