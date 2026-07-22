@@ -21,11 +21,13 @@ class App(customtkinter.CTk):
 
         self.columnconfigure(0, weight=1)
 
-        months = ["January", "February", "March", "April",
+        self.months = ["January", "February", "March", "April",
                        "May", "June", "July", "August",
                        "September", "October", "November", "December"]
-        self.today_date = f"{months[date.today().month - 1]} {date.today().year}"
-        self.day_size = 85
+        self.month = date.today().month
+        self.year = date.today().year
+        self.today_date = f"{self.months[self.month - 1]} {self.year}"
+        self.day_size = 70
 
         # Head
         self.head_frame = customtkinter.CTkFrame(self, fg_color="transparent")
@@ -36,9 +38,9 @@ class App(customtkinter.CTk):
         self.month_year = customtkinter.CTkLabel(self.head_frame, text=self.today_date, font=("Arial", 22))
         self.month_year.grid(row=0, column=1)
 
-        self.left_button = customtkinter.CTkButton(self.head_frame, text="<")
+        self.left_button = customtkinter.CTkButton(self.head_frame, text="<", command=self.minus_month)
         self.left_button.grid(row=0, column=0, sticky="w")
-        self.right_button = customtkinter.CTkButton(self.head_frame, text=">")
+        self.right_button = customtkinter.CTkButton(self.head_frame, text=">", command=self.plus_month)
         self.right_button.grid(row=0, column=2, sticky="e")
 
         # Body
@@ -47,42 +49,76 @@ class App(customtkinter.CTk):
         self.body_frame.columnconfigure(0, weight=1)
         self.body_frame.rowconfigure(0, weight=1)
 
-        self.calendar_frame = customtkinter.CTkFrame(self.body_frame, fg_color="transparent")
-        self.calendar_frame.grid(row=0, column=0)
+        # self.current_calendar_frame = customtkinter.CTkFrame(self.body_frame, fg_color="transparent")
 
-        self.sun = customtkinter.CTkLabel(self.calendar_frame, fg_color="#C2C2C2", border_color="gray", border_width=1,
+        self.current_calendar_frame = customtkinter.CTkFrame(self.body_frame, fg_color="transparent")
+        self.current_calendar_frame.grid(row=0, column=0)
+
+        # self.current_calendar_frame = customtkinter.CTkFrame(self.body_frame, fg_color="transparent")
+
+        self.generate_month()
+
+    def generate_month(self):
+        # Clear the widgets inside calendar_frame
+        for widget in self.current_calendar_frame.winfo_children():
+            widget.destroy()
+
+        # Week days
+        self.sun = customtkinter.CTkLabel(self.current_calendar_frame, fg_color="#C2C2C2", border_color="gray", border_width=1,
                                           text="Sunday", width=self.day_size, height=round(self.day_size / 4))
         self.sun.grid(row=0, column=0)
 
-        self.mon = customtkinter.CTkLabel(self.calendar_frame, fg_color="#C2C2C2", border_color="gray", border_width=1,
+        self.mon = customtkinter.CTkLabel(self.current_calendar_frame, fg_color="#C2C2C2", border_color="gray", border_width=1,
                                           text="Monday", width=self.day_size, height=round(self.day_size / 4))
         self.mon.grid(row=0, column=1)
 
-        self.tue = customtkinter.CTkLabel(self.calendar_frame, fg_color="#C2C2C2", border_color="gray", border_width=1,
+        self.tue = customtkinter.CTkLabel(self.current_calendar_frame, fg_color="#C2C2C2", border_color="gray", border_width=1,
                                           text="Tuesday", width=self.day_size, height=round(self.day_size / 4))
         self.tue.grid(row=0, column=2)
 
-        self.wen = customtkinter.CTkLabel(self.calendar_frame, fg_color="#C2C2C2", border_color="gray", border_width=1,
+        self.wen = customtkinter.CTkLabel(self.current_calendar_frame, fg_color="#C2C2C2", border_color="gray", border_width=1,
                                           text="Wednesday", width=self.day_size, height=round(self.day_size / 4))
         self.wen.grid(row=0, column=3)
 
-        self.thu = customtkinter.CTkLabel(self.calendar_frame, fg_color="#C2C2C2", border_color="gray", border_width=1,
+        self.thu = customtkinter.CTkLabel(self.current_calendar_frame, fg_color="#C2C2C2", border_color="gray", border_width=1,
                                           text="Thursday", width=self.day_size, height=round(self.day_size / 4))
         self.thu.grid(row=0, column=4)
 
-        self.fri = customtkinter.CTkLabel(self.calendar_frame, fg_color="#C2C2C2", border_color="gray", border_width=1,
+        self.fri = customtkinter.CTkLabel(self.current_calendar_frame, fg_color="#C2C2C2", border_color="gray", border_width=1,
                                           text="Friday", width=self.day_size, height=round(self.day_size / 4))
         self.fri.grid(row=0, column=5)
 
-        self.sat = customtkinter.CTkLabel(self.calendar_frame, fg_color="#C2C2C2", border_color="gray", border_width=1,
+        self.sat = customtkinter.CTkLabel(self.current_calendar_frame, fg_color="#C2C2C2", border_color="gray", border_width=1,
                                           text="Saturday", width=self.day_size, height=round(self.day_size / 4))
         self.sat.grid(row=0, column=6)
 
         # Days
-        for count, week in enumerate(self.cl.monthdayscalendar(date.today().year, date.today().month)):
+        for count, week in enumerate(self.cl.monthdayscalendar(self.year, self.month)):
             for c, day in enumerate(week):
-                button = DayBtn(self.calendar_frame, text=day, size=self.day_size)
-                button.grid(row=count+1, column=c, padx=(2, 1), pady=1)
+                button = DayBtn(self.current_calendar_frame, text=day, size=self.day_size)
+                button.grid(row=count + 1, column=c, padx=(1, 1), pady=1)
+
+
+    def update_month_year(self):
+        self.today_date = f"{self.months[self.month - 1]} {self.year}"
+        self.month_year.configure(text=self.today_date)
+
+
+    def minus_month(self):
+        self.month -= 1
+        if self.month <= 0:
+            self.month = 12
+            self.year -= 1
+        self.generate_month()
+        self.update_month_year()
+
+    def plus_month(self):
+        self.month += 1
+        if self.month >= 13:
+            self.month = 1
+            self.year += 1
+        self.generate_month()
+        self.update_month_year()
 
 
 class DayBtn(customtkinter.CTkFrame):
@@ -97,7 +133,7 @@ class DayBtn(customtkinter.CTkFrame):
 
         if text != 0:
             self.label = customtkinter.CTkLabel(self, text=text, fg_color="transparent", height=round(size/5), font=("Arial", round(size/6.5)))
-            self.label.grid(row=0, column=0, sticky="e", padx=(0, 10), pady=5)
+            self.label.grid(row=0, column=0, sticky="e", padx=(0, 6), pady=4)
 
 
 if __name__ == '__main__':
