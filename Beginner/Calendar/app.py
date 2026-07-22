@@ -89,23 +89,43 @@ class App(customtkinter.CTk):
         self.sat.grid(row=0, column=6)
 
         # Days
-        for count, week in enumerate(self.cl.monthdayscalendar(self.year, self.month)):
-            for c, day in enumerate(week):
-                button = DayBtn(self.calendar_frame, text=day, size=self.day_size)
-                button.grid(row=count + 1, column=c, padx=(1, 1), pady=1)
+        for week in range(6):
+            for day in range(7):
+                button = DayBtn(self.calendar_frame, text="", size=self.day_size)
+                button.grid(row=week + 1, column=day, padx=(1, 1), pady=1)
+
+        self.generate_month()
 
 
     def generate_month(self):
         days = []
+
         for count, week in enumerate(self.cl.monthdayscalendar(self.year, self.month)):
             for c, day in enumerate(week):
                 days.append(day)
-        count = 0
-        for widget in self.calendar_frame.winfo_children():
-            if isinstance(widget, customtkinter.CTkFrame):
+
+        if len(days) < 36:
+            for widget in self.calendar_frame.winfo_children()[-7:]:
+                widget.grid_remove()
                 for w in widget.winfo_children():
-                    if isinstance(w, customtkinter.CTkLabel):
+                    w.configure(text="")
+        else:
+            cl = 0
+            for widget in self.calendar_frame.winfo_children()[-7:]:
+                widget.grid(row=7, column=cl, padx=(1, 1), pady=1)
+                cl += 1
+
+        count = 0
+
+        for widget in self.calendar_frame.winfo_children()[7:]:
+            for w in widget.winfo_children():
+                if isinstance(w, customtkinter.CTkLabel):
+                    if days[count] != 0:
                         w.configure(text=f"{days[count]}")
+                    else:
+                        w.configure(text="")
+
+                    if count < len(days) - 1:
                         count += 1
 
 
@@ -140,15 +160,8 @@ class DayBtn(customtkinter.CTkFrame):
         self.grid_propagate(False)
 
         self.columnconfigure(0, weight=1)
-
-        if text != 0:
-            self.label = customtkinter.CTkLabel(self, text=text, fg_color="transparent", height=round(size / 5),
-                                                font=("Arial", round(size / 6.5)))
-            self.label.grid(row=0, column=0, sticky="e", padx=(0, 6), pady=4)
-        else:
-            self.label = customtkinter.CTkLabel(self, text="", fg_color="transparent", height=round(size / 5),
-                                                font=("Arial", round(size / 6.5)))
-            self.label.grid(row=0, column=0, sticky="e", padx=(0, 6), pady=4)
+        self.label = customtkinter.CTkLabel(self, text="", fg_color="transparent", height=round(size / 5), font=("Arial", round(size / 6.5)))
+        self.label.grid(row=0, column=0, sticky="e", padx=(0, 6), pady=4)
 
 
 if __name__ == '__main__':
