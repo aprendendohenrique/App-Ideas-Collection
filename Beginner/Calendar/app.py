@@ -88,13 +88,16 @@ class App(customtkinter.CTk):
                                           text="Saturday", width=self.day_size, height=round(self.day_size / 4))
         self.sat.grid(row=0, column=6)
 
-        # Days
-        for week in range(6):
-            for day in range(7):
-                button = DayBtn(self.calendar_frame, text="", size=self.day_size)
-                button.grid(row=week + 1, column=day, padx=(1, 1), pady=1)
+        # # Days
+        # for week in range(6):
+        #     for day in range(7):
+        #         button = DayBtn(self.calendar_frame, text="", size=self.day_size)
+        #         button.grid(row=week + 1, column=day, padx=(1, 1), pady=1)
+        #
+        # self.generate_month()
 
-        self.generate_month()
+        button = DayBtn(self.calendar_frame, text="1", size=self.day_size)
+        button.grid(row=1, column=0, padx=(1, 1), pady=1)
 
 
     def generate_month(self):
@@ -156,12 +159,20 @@ class DayBtn(customtkinter.CTkFrame):
     def __init__(self, master, text, size):
         super().__init__(master)
 
-        self.configure(width=size, height=size, border_width=1.5, fg_color="transparent", border_color="gray", corner_radius=0)
+        self.configure(width=size, height=size, fg_color="transparent")
         self.grid_propagate(False)
+
+        self.button = customtkinter.CTkButton(self, text="", width=size, height=size, border_width=1.5, fg_color="transparent", border_color="gray", corner_radius=0, hover=False, command=self.something)
+        self.button.grid(row=0, column=0)
 
         self.columnconfigure(0, weight=1)
         self.label = customtkinter.CTkLabel(self, text="", fg_color="transparent", height=round(size / 5), font=("Arial", round(size / 6.5)))
         self.label.grid(row=0, column=0, sticky="e", padx=(0, 6), pady=4)
+
+    def something(self):
+        self.add_button = customtkinter.CTkButton(self, text="Add")
+        self.add_button.grid(row=0, column=1)
+
 
 
 if __name__ == '__main__':
