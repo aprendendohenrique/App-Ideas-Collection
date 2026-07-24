@@ -278,6 +278,10 @@ class DayBtn(customtkinter.CTkFrame):
     def something(self):
         print("apertou")
 
+    def important(self, imp):
+        if imp == "important":
+            print("important")
+
 
 if __name__ == "__main__":
     app = App(550)
