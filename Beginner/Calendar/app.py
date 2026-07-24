@@ -43,6 +43,9 @@ class App(customtkinter.CTk):
         self.today_date = f"{self.months[self.month - 1]} {self.year}"
         self.day_buttons_size = 70
 
+        # Something here you know just to say something important
+        self.important = "important lol"
+
         # Head
         self.head_buttons_size = 25
 
