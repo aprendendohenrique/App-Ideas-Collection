@@ -10,6 +10,8 @@ class App(customtkinter.CTk):
     def __init__(self, screen_height):
         super().__init__()
 
+        """General Stuff"""
+
         # Basic Config
         self.title("Calendar")
         self.iconbitmap("calendar.ico")
@@ -18,7 +20,7 @@ class App(customtkinter.CTk):
         self.rowconfigure(0, weight=0, minsize=75)
         self.rowconfigure(1, weight=1)
 
-        self.columnconfigure(0, weight=1)
+        self.columnconfigure((0, 1), weight=1)
 
         # Variables
         self.cl = calendar.Calendar()
@@ -43,23 +45,30 @@ class App(customtkinter.CTk):
         self.today_date = f"{self.months[self.month - 1]} {self.year}"
         self.day_buttons_size = 70
 
-        # Head
+        """Head"""
+
         self.head_buttons_size = 25
 
+        # Head frame
         self.head_frame = customtkinter.CTkFrame(
-            self, fg_color="transparent", width=self.winfo_screenwidth(), height=50
+            self, fg_color="transparent", width=489, height=30
         )
-        self.head_frame.grid(row=0, column=0, sticky="nsew")
+        self.head_frame.grid(row=0, column=0, sticky="nsw", padx=28)
         self.head_frame.rowconfigure(0, weight=1)
+        self.head_frame.columnconfigure(1, weight=1)
         self.head_frame.grid_propagate(False)
 
         self.month_year = customtkinter.CTkLabel(
-            self.head_frame, text=self.today_date, font=("Arial", 22)
+            self.head_frame, text=self.today_date, font=("Arial", 22), width=180, anchor="w"
         )
-        self.month_year.grid(row=0, column=0)
+        self.month_year.grid(row=0, column=0, sticky="w")
+
+        # Buttons Frame
+        self.lr_buttons_frame = customtkinter.CTkFrame(self.head_frame, fg_color="transparent")
+        self.lr_buttons_frame.grid(row=0, column=2, sticky="e")
 
         self.left_button = customtkinter.CTkButton(
-            self.head_frame,
+            self.lr_buttons_frame,
             text="<",
             command=self.minus_month,
             corner_radius=self.head_buttons_size // 2,
@@ -69,8 +78,9 @@ class App(customtkinter.CTk):
             font=("Arial", 15),
         )
         self.left_button.grid(row=0, column=1, sticky="")
+
         self.right_button = customtkinter.CTkButton(
-            self.head_frame,
+            self.lr_buttons_frame,
             text=">",
             command=self.plus_month,
             corner_radius=self.head_buttons_size // 2,
@@ -82,13 +92,14 @@ class App(customtkinter.CTk):
         self.right_button.grid(row=0, column=2, sticky="")
 
         self.tasks_label = customtkinter.CTkLabel(
-            self.head_frame, text="Tasks", font=("Arial", 22)
+            self, text="Tasks", font=("Arial", 22), anchor="center", width=300
         )
-        self.tasks_label.grid(row=0, column=3, columnspan=2, sticky="e")
+        self.tasks_label.grid(row=0, column=1, sticky="ew")
 
-        # Body
+        """Body"""
+
         self.body_frame = customtkinter.CTkFrame(self, fg_color="transparent")
-        self.body_frame.grid(row=1, column=0, sticky="nsew", pady=20)
+        self.body_frame.grid(row=1, column=0, columnspan=3, sticky="nw", padx=20, pady=20)
         self.body_frame.columnconfigure(0, weight=1)
         self.body_frame.rowconfigure(0, weight=1)
 
@@ -195,17 +206,6 @@ class App(customtkinter.CTk):
             for c, day in enumerate(week):
                 days.append(day)
 
-        if len(days) < 36:
-            for widget in self.calendar_frame.winfo_children()[-7:]:
-                widget.grid_remove()
-                for w in widget.winfo_children():
-                    w.configure(text="")
-        else:
-            cl = 0
-            for widget in self.calendar_frame.winfo_children()[-7:]:
-                widget.grid(row=7, column=cl, padx=(1, 1), pady=1)
-                cl += 1
-
         count = 0
 
         for widget in self.calendar_frame.winfo_children()[7:]:
@@ -258,7 +258,6 @@ class DayBtn(customtkinter.CTkFrame):
             border_color="gray",
             corner_radius=0,
             hover=False,
-            command=self.something,
         )
         self.button.grid(row=0, column=0)
 
