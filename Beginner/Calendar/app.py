@@ -43,9 +43,6 @@ class App(customtkinter.CTk):
         self.today_date = f"{self.months[self.month - 1]} {self.year}"
         self.day_buttons_size = 70
 
-        # Something here you know just to say something important
-        self.important = "important lol"
-
         # Head
         self.head_buttons_size = 25
 
@@ -274,13 +271,6 @@ class DayBtn(customtkinter.CTkFrame):
             font=("Arial", round(size / 6.5)),
         )
         self.label.grid(row=0, column=0, sticky="ne", padx=(0, 6), pady=4)
-
-    def something(self):
-        print("apertou")
-
-    def important(self, imp):
-        if imp == "important":
-            print("important")
 
 
 if __name__ == "__main__":
