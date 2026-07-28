@@ -24,7 +24,6 @@ class App(customtkinter.CTk):
 
         # Variables
         self.cl = calendar.Calendar()
-
         self.months = [
             "January",
             "February",
@@ -39,11 +38,12 @@ class App(customtkinter.CTk):
             "November",
             "December",
         ]
-
         self.month = date.today().month
         self.year = date.today().year
         self.today_date = f"{self.months[self.month - 1]} {self.year}"
+
         self.day_buttons_size = 70
+        self.last_btn_clicked = None
 
         """Head"""
 
@@ -190,14 +190,11 @@ class App(customtkinter.CTk):
         for week in range(6):
             for day in range(7):
                 button = DayBtn(
-                    self.calendar_frame, text="", size=self.day_buttons_size
+                    self.calendar_frame, self, size=self.day_buttons_size
                 )
                 button.grid(row=week + 1, column=day, padx=(1, 1), pady=1)
 
         self.generate_month()
-
-        button = DayBtn(self.calendar_frame, text="1", size=self.day_buttons_size)
-        button.grid(row=1, column=0, padx=(1, 1), pady=1)
 
     def generate_month(self):
         days = []
@@ -242,34 +239,64 @@ class App(customtkinter.CTk):
 
 class DayBtn(customtkinter.CTkFrame):
 
-    def __init__(self, master, text, size):
+    def __init__(self, master, app, size):
         super().__init__(master)
 
-        self.configure(width=size, height=size, fg_color="transparent")
+        self.app = app
+
+        # Colors
+        self.hover_color = "#C2C2C2"
+        self.hover_fg_color = "#0E00A3"
+        self.fg_color = "transparent"
+        self.hover_text_color = "white"
+        self.border_color = "gray"
+
+        self.configure(width=size, height=size, fg_color=self.fg_color, corner_radius=0, border_width=1.5, border_color=self.border_color)
         self.grid_propagate(False)
 
-        self.button = customtkinter.CTkButton(
-            self,
-            text="",
-            width=size,
-            height=size,
-            border_width=1.5,
-            fg_color="transparent",
-            border_color="gray",
-            corner_radius=0,
-            hover=False,
-        )
-        self.button.grid(row=0, column=0)
+        self.bind("<Enter>", self.on_enter)
+        self.bind("<Leave>", self.on_leave)
+        self.bind("<Button-1>", self.on_click)
+
+        self.selected = False
 
         self.columnconfigure(0, weight=1)
         self.label = customtkinter.CTkLabel(
             self,
             text="",
-            fg_color="transparent",
+            fg_color=self.fg_color,
             height=round(size / 5),
             font=("Arial", round(size / 6.5)),
         )
         self.label.grid(row=0, column=0, sticky="ne", padx=(0, 6), pady=4)
+
+    def on_enter(self, event):
+        if not self.selected:
+            self.configure(fg_color=self.hover_color)
+            self.label.configure(fg_color=self.hover_color)
+
+    def on_leave(self, event):
+        if not self.selected:
+            self.configure(fg_color=self.fg_color)
+            self.label.configure(fg_color=self.fg_color)
+
+    def on_click(self, event=None):
+        if not self.selected:
+            if self.app.last_btn_clicked:
+                if app.last_btn_clicked != self:
+                    self.selected = True
+                    self.configure(fg_color=self.hover_fg_color, border_color=self.hover_fg_color)
+                    self.label.configure(fg_color=self.hover_fg_color, text_color=self.hover_text_color)
+                    self.app.last_btn_clicked.on_click()
+            else:
+                self.selected = True
+                self.configure(fg_color=self.hover_fg_color, border_color=self.hover_fg_color)
+                self.label.configure(fg_color=self.hover_fg_color, text_color=self.hover_text_color)
+                self.app.last_btn_clicked = self
+        else:
+            self.configure(fg_color=self.fg_color, border_color=self.border_color)
+            self.label.configure(fg_color=self.fg_color, text_color="black")
+            self.selected = False
 
 
 if __name__ == "__main__":
