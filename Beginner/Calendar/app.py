@@ -297,6 +297,10 @@ class DayBtn(customtkinter.CTkFrame):
             self.configure(fg_color=self.fg_color, border_color=self.border_color)
             self.label.configure(fg_color=self.fg_color, text_color="black")
             self.selected = False
+    # you know I was here so something
+        self.somehting = "something"
+    def you_kwno_something(self):
+        print("something")
 
 
 if __name__ == "__main__":
