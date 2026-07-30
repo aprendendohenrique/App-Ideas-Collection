@@ -283,11 +283,12 @@ class DayBtn(customtkinter.CTkFrame):
     def on_click(self, event=None):
         if not self.selected:
             if self.app.last_btn_clicked:
-                if app.last_btn_clicked != self:
-                    self.selected = True
-                    self.configure(fg_color=self.hover_fg_color, border_color=self.hover_fg_color)
-                    self.label.configure(fg_color=self.hover_fg_color, text_color=self.hover_text_color)
+                self.selected = True
+                self.configure(fg_color=self.hover_fg_color, border_color=self.hover_fg_color)
+                self.label.configure(fg_color=self.hover_fg_color, text_color=self.hover_text_color)
+                if app.last_btn_clicked != self and app.last_btn_clicked.selected == True:
                     self.app.last_btn_clicked.on_click()
+                self.app.last_btn_clicked = self
             else:
                 self.selected = True
                 self.configure(fg_color=self.hover_fg_color, border_color=self.hover_fg_color)
@@ -297,10 +298,6 @@ class DayBtn(customtkinter.CTkFrame):
             self.configure(fg_color=self.fg_color, border_color=self.border_color)
             self.label.configure(fg_color=self.fg_color, text_color="black")
             self.selected = False
-    # you know I was here so something
-        self.somehting = "something"
-    def you_kwno_something(self):
-        print("something")
 
 
 if __name__ == "__main__":
