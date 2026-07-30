@@ -1,4 +1,5 @@
 import calendar
+import sys
 from datetime import date
 
 import customtkinter
@@ -196,6 +197,27 @@ class App(customtkinter.CTk):
 
         self.generate_month()
 
+        # Tasks
+        self.tasks_frame = customtkinter.CTkFrame(self)
+        self.tasks_frame.grid(row=1, column=1, sticky="nsew", padx=5, pady=(0, 5))
+        self.tasks_frame.columnconfigure(0, weight=1)
+
+        self.task_input = customtkinter.CTkTextbox(self.tasks_frame, height=20, text_color="gray")
+        self.task_input.insert("0.0", "+ Task")
+
+        self.task_input.bind("<Button-1>", self.on_click_text_box)
+        self.task_input.bind("<FocusOut>", self.focus_out_text_box)
+
+        self.update()
+
+    def update(self):
+        if self.last_btn_clicked:
+            self.task_input.grid(row=0, column=0, sticky="ew", padx=(5, 5), pady=5)
+        if not self.last_btn_clicked:
+            self.task_input.grid_forget()
+
+        self.after(30, self.update)
+
     def generate_month(self):
         days = []
 
@@ -235,6 +257,14 @@ class App(customtkinter.CTk):
             self.year += 1
         self.update_month_year()
         self.generate_month()
+
+    def on_click_text_box(self, event):
+        self.task_input.configure(text_color="black")
+        self.task_input.delete("0.0", "end")
+
+    def focus_out_text_box(self, event):
+        self.task_input.configure(text_color="gray")
+        self.task_input.insert("0.0", "+ Task")
 
 
 class DayBtn(customtkinter.CTkFrame):
@@ -298,6 +328,7 @@ class DayBtn(customtkinter.CTkFrame):
             self.configure(fg_color=self.fg_color, border_color=self.border_color)
             self.label.configure(fg_color=self.fg_color, text_color="black")
             self.selected = False
+            self.app.last_btn_clicked = None
 
 
 if __name__ == "__main__":
