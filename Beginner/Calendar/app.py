@@ -210,6 +210,9 @@ class App(customtkinter.CTk):
 
         self.update()
 
+        # Make the add task
+        self.add_task = "Add the task"
+
     def update(self):
         if self.last_btn_clicked:
             self.task_input.grid(row=0, column=0, sticky="ew", padx=(5, 5), pady=5)
