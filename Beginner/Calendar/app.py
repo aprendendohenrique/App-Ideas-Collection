@@ -3,6 +3,7 @@ import sys
 from datetime import date
 
 import customtkinter
+from pandas.core.config_init import table_schema_cb
 
 
 class App(customtkinter.CTk):
@@ -45,6 +46,8 @@ class App(customtkinter.CTk):
 
         self.day_buttons_size = 70
         self.last_btn_clicked = None
+
+        self.task_input_row = 0
 
         """Head"""
 
@@ -210,12 +213,9 @@ class App(customtkinter.CTk):
 
         self.update()
 
-        # Make the add task
-        self.add_task = "Add the task"
-
     def update(self):
         if self.last_btn_clicked:
-            self.task_input.grid(row=0, column=0, sticky="ew", padx=(5, 5), pady=5)
+            self.task_input.grid(row=self.task_input_row, column=0, sticky="ew", padx=(5, 5), pady=5)
         if not self.last_btn_clicked:
             self.task_input.grid_forget()
 
@@ -266,6 +266,16 @@ class App(customtkinter.CTk):
         self.task_input.delete("0.0", "end")
 
     def focus_out_text_box(self, event):
+        text = self.task_input.get("0.0", "end").strip()
+
+        if text != "":
+            task = Task(self.tasks_frame, text=text)
+            task.grid(row=self.task_input_row, column=0, sticky="ew", padx=(5, 5), pady=5)
+
+            self.task_input_row += 1
+            self.task_input.grid(row=self.task_input_row)
+
+        self.task_input.delete("0.0", "end")
         self.task_input.configure(text_color="gray")
         self.task_input.insert("0.0", "+ Task")
 
@@ -332,6 +342,19 @@ class DayBtn(customtkinter.CTkFrame):
             self.label.configure(fg_color=self.fg_color, text_color="black")
             self.selected = False
             self.app.last_btn_clicked = None
+
+class Task(customtkinter.CTkFrame):
+
+    def __init__(self, master, text):
+        super().__init__(master)
+
+        checkbox = customtkinter.CTkCheckBox(self, text="", width=10, border_width=2, corner_radius=0)
+        checkbox.grid(row=0, column=0, sticky="w", padx=(5, 1), pady=5)
+
+        label = customtkinter.CTkLabel(self, text=text, anchor="w")
+        label.grid(row=0, column=1, sticky="w", pady=5)
+
+        # options... to come
 
 
 if __name__ == "__main__":
