@@ -1,9 +1,7 @@
 import calendar
-import sys
 from datetime import date
 
 import customtkinter
-from pandas.core.config_init import table_schema_cb
 
 
 class App(customtkinter.CTk):
@@ -47,6 +45,7 @@ class App(customtkinter.CTk):
         self.day_buttons_size = 70
         self.last_btn_clicked = None
 
+        self.task_data = {}
         self.task_input_row = 0
 
         """Head"""
@@ -269,6 +268,14 @@ class App(customtkinter.CTk):
         text = self.task_input.get("0.0", "end").strip()
 
         if text != "":
+            if self.year not in self.task_data:
+                self.task_data[self.year] = {}
+                print(self.task_data)
+            if self.month not in self.task_data[self.year]:
+                self.task_data[self.year] = {self.month: [text]}
+            else:
+                self.task_data[self.year][self.month].append(text)
+
             task = Task(self.tasks_frame, text=text)
             task.grid(row=self.task_input_row, column=0, sticky="ew", padx=(5, 5), pady=5)
 
