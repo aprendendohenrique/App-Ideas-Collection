@@ -44,6 +44,7 @@ class App(customtkinter.CTk):
 
         self.day_buttons_size = 70
         self.last_btn_clicked = None
+        self.showed_tasks = False
 
         self.task_data = {}
         self.task_input_row = 0
@@ -214,9 +215,12 @@ class App(customtkinter.CTk):
 
     def update(self):
         if self.last_btn_clicked:
-            self.task_input.grid(row=self.task_input_row, column=0, sticky="ew", padx=(5, 5), pady=5)
+            if not self.showed_tasks:
+                self.showed_tasks = True
+                self.task_input.grid(row=self.task_input_row, column=0, sticky="ew", padx=(5, 5), pady=5)
         if not self.last_btn_clicked:
             self.task_input.grid_forget()
+            self.showed_tasks = False
 
         self.after(30, self.update)
 
@@ -270,11 +274,12 @@ class App(customtkinter.CTk):
         if text != "":
             if self.year not in self.task_data:
                 self.task_data[self.year] = {}
-                print(self.task_data)
             if self.month not in self.task_data[self.year]:
                 self.task_data[self.year] = {self.month: [text]}
             else:
                 self.task_data[self.year][self.month].append(text)
+
+            # Quando cria, ele faz aqui, quando clica no dia, ele roda se tiver!
 
             task = Task(self.tasks_frame, text=text)
             task.grid(row=self.task_input_row, column=0, sticky="ew", padx=(5, 5), pady=5)
