@@ -47,6 +47,7 @@ class App(customtkinter.CTk):
         self.showed_tasks = False
 
         self.task_data = {}
+        self.tasks = []
         self.task_input_row = 0
 
         """Head"""
@@ -271,18 +272,40 @@ class App(customtkinter.CTk):
     def focus_out_text_box(self, event):
         text = self.task_input.get("0.0", "end").strip()
 
+        self.generate_task(text)
+
+    def generate_tasks(self, day, text=""):
+        try:
+            day = int(day)
+        except ValueError:
+            print("shit")
+            return
+
+        if self.task_data and self.year in self.task_data:
+            if self.month in self.task_data[self.year]:
+                for task in self.task_data[self.year][self.month]:
+                    if day in task:
+                        for value in task.values():
+                            self.generate_task(value)
+
+    def generate_task(self, text):
         if text != "":
+            day = int(self.last_btn_clicked.label.cget("text"))
+
             if self.year not in self.task_data:
                 self.task_data[self.year] = {}
             if self.month not in self.task_data[self.year]:
-                self.task_data[self.year] = {self.month: [text]}
+                self.task_data[self.year] = {
+                    self.month: [{day: text}]}
             else:
-                self.task_data[self.year][self.month].append(text)
-
-            # Quando cria, ele faz aqui, quando clica no dia, ele roda se tiver!
+                for task in self.task_data[self.year][self.month]:
+                    if day not in task:
+                        self.task_data[self.year][self.month].append({day: text})
 
             task = Task(self.tasks_frame, text=text)
             task.grid(row=self.task_input_row, column=0, sticky="ew", padx=(5, 5), pady=5)
+
+            self.tasks.append(task)
 
             self.task_input_row += 1
             self.task_input.grid(row=self.task_input_row)
@@ -290,6 +313,10 @@ class App(customtkinter.CTk):
         self.task_input.delete("0.0", "end")
         self.task_input.configure(text_color="gray")
         self.task_input.insert("0.0", "+ Task")
+
+    def delete_tasks(self):
+        for task in self.tasks:
+            task.destroy()
 
 
 class DayBtn(customtkinter.CTkFrame):
@@ -344,16 +371,19 @@ class DayBtn(customtkinter.CTkFrame):
                 if app.last_btn_clicked != self and app.last_btn_clicked.selected == True:
                     self.app.last_btn_clicked.on_click()
                 self.app.last_btn_clicked = self
+                self.app.generate_tasks(self.label.cget("text"))
             else:
                 self.selected = True
                 self.configure(fg_color=self.hover_fg_color, border_color=self.hover_fg_color)
                 self.label.configure(fg_color=self.hover_fg_color, text_color=self.hover_text_color)
                 self.app.last_btn_clicked = self
+                self.app.generate_tasks(self.label.cget("text"))
         else:
             self.configure(fg_color=self.fg_color, border_color=self.border_color)
             self.label.configure(fg_color=self.fg_color, text_color="black")
             self.selected = False
             self.app.last_btn_clicked = None
+            self.app.delete_tasks()
 
 class Task(customtkinter.CTkFrame):
 
