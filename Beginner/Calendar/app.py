@@ -256,6 +256,8 @@ class App(customtkinter.CTk):
             self.year -= 1
         self.update_month_year()
         self.generate_month()
+        if self.last_btn_clicked:
+            self.last_btn_clicked.on_click()
 
     def plus_month(self):
         self.month += 1
@@ -264,6 +266,8 @@ class App(customtkinter.CTk):
             self.year += 1
         self.update_month_year()
         self.generate_month()
+        if self.last_btn_clicked:
+            self.last_btn_clicked.on_click()
 
     def on_click_text_box(self, event):
         self.task_input.configure(text_color="black")
@@ -298,9 +302,13 @@ class App(customtkinter.CTk):
                 self.task_data[self.year] = {
                     self.month: [{day: text}]}
             else:
+                there_is = False
                 for task in self.task_data[self.year][self.month]:
-                    if day not in task:
-                        self.task_data[self.year][self.month].append({day: text})
+                    if day in task:
+                        there_is = True
+
+                if not there_is:
+                    self.task_data[self.year][self.month].append({day: text})
 
             task = Task(self.tasks_frame, text=text)
             task.grid(row=self.task_input_row, column=0, sticky="ew", padx=(5, 5), pady=5)
