@@ -398,13 +398,16 @@ class Task(customtkinter.CTkFrame):
     def __init__(self, master, text):
         super().__init__(master)
 
+        self.columnconfigure(2, weight=1)
+
         checkbox = customtkinter.CTkCheckBox(self, text="", width=10, border_width=2, corner_radius=0)
         checkbox.grid(row=0, column=0, sticky="w", padx=(5, 1), pady=5)
 
         label = customtkinter.CTkLabel(self, text=text, anchor="w")
         label.grid(row=0, column=1, sticky="w", pady=5)
 
-        # options... to come
+        three_dots = customtkinter.CTkButton(self, text="...", width=30, height=30, anchor="center", font=("Arial", 16), fg_color="gray")
+        three_dots.grid(row=0, column=2, sticky="e", padx=(0, 5), pady=5)
 
 
 if __name__ == "__main__":
